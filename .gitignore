@@ -1,0 +1,5 @@
+vendor
+*.idea
+.travis.yml
+composer.json
+composer.lock
