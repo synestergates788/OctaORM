@@ -7,7 +7,7 @@ A is an advance PHP-PDO ORM database class used by OctaPHP framework. This datab
 [![Badges](http://img.shields.io/:badges-8/10-ff6799.svg?style=flat-square)](https://github.com/badges/badgerbadgerbadger)
 
 ## Powered By
-<img src="docs-img/redbeanphp.png" width="100" height="100">
+<img src="vendor/docs-img/redbeanphp.png" width="100" height="100">
 
 # Author
 [Melquecedec Catang-catang](https://www.linkedin.com/in/melquecedec-catang-catang)
