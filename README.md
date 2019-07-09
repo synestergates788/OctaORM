@@ -6,6 +6,9 @@ A is an advance PHP-PDO ORM database class used by OctaPHP framework. This datab
 [![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](http://badges.mit-license.org) 
 [![Badges](http://img.shields.io/:badges-8/10-ff6799.svg?style=flat-square)](https://github.com/badges/badgerbadgerbadger)
 
+## Powered By
+<img src="docs-img/redbeanphp.png" width="100" height="100">
+
 # Author
 [Melquecedec Catang-catang](https://www.linkedin.com/in/melquecedec-catang-catang)
 
@@ -38,31 +41,83 @@ require_once('database_config.php');
 //some code here
 ```
 
-# OctaORM Active Record Documentation
+# Documentation
 
-**$db->get();** <br />
-Runs the selection query and returns the result. Can be used by itself to retrieve all records from a table
+**$db->get(); And $db->result();** <br />
+Runs the selection query and returns an array of result.
 
 ```
-$query = $db->get('mytable');
+$db->get('mytable');
+$query = $db->result();
 
 // Produces: SELECT * FROM mytable
 ```
 
-The second and third parameters enable you to set a limit and offset clause:
+The second and third parameters of ```$db->get()``` enable you to set a limit and offset clause:
 ```
-$query = $db->get('mytable', 10, 20); <br />
+$db->get('mytable', 10, 20); <br />
+$query = $db->result();
 // Produces: SELECT * FROM mytable LIMIT 20, 10 (in MySQL. Other databases have slightly different syntax)
 ```
 
 You'll notice that the above function is assigned to a variable named $query, which can be used to show the results:
 ```
-$query = $db->get('mytable');
+$db->get('mytable');
+$query = $db->result();
 
-foreach ($query->result() as $row)
+foreach ($query as $row)
 {
     echo $row->title;
 }
+```
+<br />
+
+**$db->get(); And $db->row();** <br />
+Runs the selection query and returns a row of data.
+
+```
+$db->get('mytable');
+$query = $db->row();
+
+// Produces: SELECT * FROM mytable LIMIT 1
+```
+
+You'll notice that the above function is assigned to a variable named $query, which can be used to fetch the row:
+```
+$db->get('mytable');
+$query = $db->row();
+echo $query['title']
+```
+<br />
+
+**$db->get(); And $db->num_rows();** <br />
+Permits you to determine the number of rows in a particular table. 
+
+```
+$db->get('mytable');
+$query = $db->num_rows();
+
+// Produces an integer, like 25
+```
+
+You'll notice that the above function is assigned to a variable named $query, which can be used to fetch the row:
+```
+$db->get('mytable');
+$query = $db->row();
+echo $query; //return number of rows
+```
+<br />
+
+**$db->last_query(); (for sql debugging)** <br />
+Permits you to determine the last query which was run
+
+```
+$db->get('mytable');
+$query = $db->result();
+$last_query = $db->last_query();
+echo $last_query;
+
+// will return sql code: "SELECT * FROM mytable"
 ```
 <br />
 
@@ -76,7 +131,7 @@ $query = $db->get('mytable');
 
 // Produces: SELECT title, content, date FROM mytable
 ```
-$db->select() accepts an optional second parameter. If you set it to FALSE, OctaORM will not try to protect your field or table names with backticks. This is useful if you need a compound select statement.
+$db->select() accepts an optional second parameter. If you set it to FALSE, OctaPHP will not try to protect your field or table names with backticks. This is useful if you need a compound select statement.
 ```
 $db->select('(SELECT SUM(payments.amount) FROM payments WHERE payments.invoice_id=4') AS amount_paid', FALSE);
 $query = $db->get('mytable');
@@ -88,21 +143,20 @@ Permits you to write the JOIN portion of your query:
 
 ```
 $db->select('*');
-$db->from('blogs');
 $db->join('comments', 'comments.id = blogs.id');
-
-$query = $db->get();
+$db->get('blogs');
+$query = $db->result();
 
 // Produces:
 // SELECT * FROM blogs
-// JOIN comments ON comments.id = blogs.id
+// INNER JOIN comments ON comments.id = blogs.id
 ```
 
 Multiple function calls can be made if you need several joins in one query. <br />
 If you need a specific type of JOIN you can specify it via the third parameter of the function. Options are: left, right, outer, inner, left outer, and right outer.
 
 ```
- $db->join('comments', 'comments.id = blogs.id', 'left');
+ $db->join('comments', 'comments.id = blogs.id', 'LEFT');
 
 // Produces: LEFT JOIN comments ON comments.id = blogs.id
 ```
@@ -147,7 +201,7 @@ $where = "name='Joe' AND status='boss' OR status='active'";
 $db->where($where);
 ```
 **$db->where()** <br />
-accepts an optional third parameter. If you set it to FALSE, OctaORM will not try to protect your field or table names with backticks.
+accepts an optional third parameter. If you set it to FALSE, OctaPHP will not try to protect your field or table names with backticks.
 <br />
 
 **$db->or_where();** <br />
@@ -330,58 +384,86 @@ Here is an example using an object:
 $object = new Myclass;
 
 $db->insert('mytable', $object);
+Generates an insert string based on the data you supply, and runs the query. You can either pass an array or an object to the function. Here is an example using an array:
 
 // Produces: INSERT INTO mytable (title, content, date) VALUES ('My Title', 'My Content', 'My Date')
 ```
 The first parameter will contain the table name, the second is an object.
+> __Note:__ All values are escaped automatically producing safer queries.
+<br />
+
+**$db->insert_batch();** <br />
+Generates an insert string based on the data you supply, and runs the query. You can either pass an array or an object to the function. Here is an example using an array:
+```
+$data = array(
+    [
+        'title' => 'My title' ,
+        'name' => 'My Name' ,
+        'date' => 'My date'
+    ],
+    [
+        'title' => 'Another title' ,
+        'name' => 'Another Name' ,
+        'date' => 'Another date'
+    ]
+);
+$db->insert_batch($data, 'mytable');
+
+// Produces: INSERT INTO mytable (title, name, date) VALUES ('My title', 'My name', 'My date'), ('Another title', 'Another name', 'Another date')
+```
+The first parameter is an associative array of values, the second will contain the table name.
+> __Note:__ All values are escaped automatically producing safer queries.
 <br />
 
 **$db->update();** <br />
 Generates an update string and runs the query based on the data you supply. You can pass an array or an object to the function. Here is an example using an array:
 ```
- $data = array(
-               'title' => $title,
-               'name' => $name,
-               'date' => $date
-            );
-
-$db->where('id', $id);
-$db->update('mytable', $data);
-
-// Produces:
-// UPDATE mytable
-// SET title = '{$title}', name = '{$name}', date = '{$date}'
-// WHERE id = $id
-```
-Or you can supply an object:
-```
-/*
-    class Myclass {
-        var $title = 'My Title';
-        var $content = 'My Content';
-        var $date = 'My Date';
-    }
-*/
-
-$object = new Myclass;
-
-$db->where('id', $id);
-$db->update('mytable', $object);
+$data = array(
+    'id' => $id,
+    'title' => $title,
+    'name' => $name,
+    'date' => $date
+);
+$db->update('mytable', $data, 'id');
 
 // Produces:
 // UPDATE mytable
 // SET title = '{$title}', name = '{$name}', date = '{$date}'
 // WHERE id = $id
 ```
-You'll notice the use of the $db->where() function, enabling you to set the WHERE clause. You can optionally pass this information directly into the update function as a string:
+<br />
+
+**$db->update_batch();** <br />
+Generates an update string based on the data you supply, and runs the query. You can either pass an array or an object to the function. Here is an example using an array:
 ```
-$db->update('mytable', $data, "id = 4");
+$data = array(
+    [
+        'id' => '1' ,
+        'title' => 'My title' ,
+        'name' => 'My Name 2' ,
+        'date' => 'My date 2'
+    ],
+    [
+        'id' => '2' ,
+        'title' => 'Another title' ,
+        'name' => 'Another Name 2' ,
+        'date' => 'Another date 2'
+    ]
+);
+
+$db->update_batch('mytable', $data, 'id'); 
+
+// Produces:
+// UPDATE mytable
+// SET title = 'My title', name = 'My Name 2', date = 'My date 2'
+// WHERE id = $id
+// ELSE END
+// SET title = 'Another title', name = 'Another Name 2', date = 'Another date 2'
+// WHERE id = $id
 ```
-Or as an array:
-```
-$db->update('mytable', $data, array('id' => $id));
-```
-You may also use the $db->set() function described above when performing updates.
+
+The first parameter will contain the table name, the second is an associative array of values, the third parameter is the where key.
+> __Note:__ All values are escaped automatically producing safer queries.
 <br />
 
 **$db->delete();** <br />
@@ -393,25 +475,27 @@ $db->delete('mytable', array('id' => $id));
 // DELETE FROM mytable
 // WHERE id = $id
 ```
-The first parameter is the table name, the second is the where clause. You can also use the where() or or_where() functions instead of passing the data to the second parameter of the function:
+The first parameter is the table name, the second is the where clause.
+If you want to delete multiple data from a table, the second parameter must be an array of ID's
 ```
- $db->where('id', $id);
-$db->delete('mytable');
+$db->delete($table,[1,2,3]);
 
 // Produces:
 // DELETE FROM mytable
-// WHERE id = $id
+// WHERE (id) IN (1,2,3)
 ```
-An array of table names can be passed into delete() if you would like to delete data from more than 1 table.
+
+**$db->delete_all();** <br />
+This will wipe all the data of a table
 ```
-$tables = array('table1', 'table2', 'table3');
-$db->where('id', '5');
-$db->delete($tables);
+$db->delete_all('mytable');
+
+// Produces:
+// TRUNCATE TABLE mytable
 ```
-If you want to delete all data from a table, you can use the truncate() function, or empty_table().
 <br />
 
-**Example Of Queries Using squeedPHP Active Record** <br />
+**Example Of Queries Using OctaPHP Active Record** <br />
 ```
 $select = array(
    "*",
@@ -427,7 +511,7 @@ $db->group_by("u.user_type");
 $db->join("user_role AS ur","ur.user_role_id=ut.user_role","LEFT");
 $db->join("user_type AS ut","ut.user_type_id=u.user_type","LEFT");
 $db->get('users AS u');
-$result_data = $db->result(); //this will return an array of results
+$result_data = $db->result(); //this will return an array of result
 ```
 <br />
 
