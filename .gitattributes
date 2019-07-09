@@ -1,7 +1,7 @@
-vendor
-.idea
-.travis.yml
-composer.json
-composer.lock
-README.md
-LICENSE
+/vendor export-ignore
+/.idea export-ignore
+/.travis.yml export-ignore
+/composer.json export-ignore
+/composer.lock export-ignore
+/README.md export-ignore
+/LICENSE export-ignore
