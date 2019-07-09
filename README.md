@@ -14,7 +14,12 @@ Is an advance PHP-PDO ORM database class used by [OctaPHP](https://github.com/sy
 
 # Getting Started
 
-installing OctaORM does not require composer, clone the project and put it in the directory where your site locally allocated.
+installing via composer.
+```
+composer require octa-php/octa-orm
+```
+
+Or clone this repo
 
 ### Prerequisites
 
