@@ -1,5 +1,5 @@
-vendor
-*.idea
-.travis.yml
-composer.json
-composer.lock
+#vendor
+#*.idea
+#.travis.yml
+#composer.json
+#composer.lock
