@@ -1,4 +1,4 @@
-vendor/ export-ignore
+vendor
 .idea
 .travis.yml
 composer.json
