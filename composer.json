@@ -1,6 +1,16 @@
 {
-  "require": {
-    "phpunit/phpunit": "^7.5",
-    "php": ">=5.4.0"
-  }
+    "name": "octa-php/octa-orm",
+    "description": "an advance PHP-PDO ORM database class used by octaphp framework",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "melquecedec catang-catang",
+            "email": "melquecedec.catangcatang@outlook.com"
+        }
+    ],
+    "require": {
+      "phpunit/phpunit": "^7.5",
+      "php": ">=5.4.0"
+    }
 }
