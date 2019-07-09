@@ -35,12 +35,13 @@ class OctaORM{
         $this->db_field = $db;
 
         if(!$this->redbean->testConnection()){
-            $this->redbean->setup($this->initiate_database_connection($db,false));
+            $conn = $this->initiate_database_connection($db);
+            $this->redbean->setup($conn);
             $this->redbean->useFeatureSet( 'novice/latest' );
         }
     }
 
-    public function initiate_database_connection($db,$close_conn=false){
+    public function initiate_database_connection($db){
         $DB_HOST = $db['hostname'];
         $DB_USERNAME = $db['username'];
         $DB_PASSWORD = $db['password'];
@@ -54,12 +55,7 @@ class OctaORM{
 
         $DB_con = new PDO("mysql:host={$DB_HOST};dbname={$DB_NAME}",$DB_USERNAME,$DB_PASSWORD);
         $DB_con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-        if($close_conn == true){
-            $DB_con = null;
-        }else{
-            return $DB_con;
-        }
+        return $DB_con;
     }
 
     public function insert_id(){
@@ -177,8 +173,8 @@ class OctaORM{
             }
 
         }else{
-            $result = $this->redbean->trash($table,$id);
-            return ($result) ? true : false;
+            $this->redbean->trash($table,$id);
+            return true;
         }
     }
 
@@ -597,20 +593,20 @@ class OctaORM{
     }
 
     public function inspect($data){
-        if(is_array($data)){
+        if($data){
+            if(is_array($data)){
 
-            $result = array();
-            if($data){
+                $result = array();
                 foreach($data as $key=>$row){
                     $result[$key]=$this->redbean->inspect($row);
                 }
+
+                return ($result) ? $result : false;
+
+            }else{
+                $this->redbean->inspect($data);
+                return true;
             }
-
-            return ($result) ? $result : false;
-
-        }else{
-            $result = $this->redbean->inspect($data);
-            return ($result) ? $result : false;
         }
     }
 
