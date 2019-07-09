@@ -12,7 +12,7 @@ A is an advance PHP-PDO ORM database class used by OctaPHP framework. This datab
 # Author
 [Melquecedec Catang-catang](https://www.linkedin.com/in/melquecedec-catang-catang)
 
-### Getting Started
+# Getting Started
 
 installing OctaORM does not require composer, clone the project and put it in the directory where your site locally allocated.
 
