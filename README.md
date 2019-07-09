@@ -1,5 +1,5 @@
 # OctaORM
-A is an advance PHP-PDO ORM database class used by OctaPHP framework. This database class is inspired by codeigniter active record.
+Is an advance PHP-PDO ORM database class used by [OctaPHP](https://github.com/synestergates788/OctaPHP) framework. This database class is inspired by codeigniter active record.
 
 [![Build Status](https://travis-ci.org/synestergates788/OctaORM.svg?branch=master)](https://travis-ci.org/synestergates788/OctaORM) 
 [![Coverage Status](http://img.shields.io/coveralls/badges/badgerbadgerbadger.svg?style=flat-square)](https://coveralls.io/r/badges/badgerbadgerbadger) 
