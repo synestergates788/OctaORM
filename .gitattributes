@@ -5,3 +5,5 @@
 /composer.lock export-ignore
 /README.md export-ignore
 /LICENSE export-ignore
+/.gitignore export-ignore
+/.gitattributes export-ignore
