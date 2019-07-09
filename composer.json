@@ -12,5 +12,8 @@
     "require": {
       "phpunit/phpunit": "^7.5",
       "php": ">=5.4.0"
+    },
+    "archive": {
+        "exclude": ["vendor"]
     }
 }
