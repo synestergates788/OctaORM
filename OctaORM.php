@@ -246,7 +246,7 @@ class OctaORM{
             }
         }
 
-        $this->or_where = ($arr_check == false) ? $tmp_or_where : "OR ".$tmp_or_where;
+        $this->or_where = ($arr_check) ? "OR ".$tmp_or_where : $tmp_or_where;
     }
 
     public function where_in($field,$data){
