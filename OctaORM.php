@@ -337,7 +337,7 @@ class OctaORM{
 
         }
 
-        $this->like = ($arr_check == false) ? "WHERE ".$tmp_like : $tmp_like;
+        $this->like = ($arr_check) ? $tmp_like : "WHERE ".$tmp_like;
     }
 
     public function or_like($data=null,$match=null){
