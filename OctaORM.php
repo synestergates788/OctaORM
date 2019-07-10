@@ -46,7 +46,6 @@ class OctaORM{
         $DB_USERNAME = $db['username'];
         $DB_PASSWORD = $db['password'];
         $DB_NAME = $db['database'];
-        $DB_con = null;
 
         $DB_con = new PDO("mysql:host=$DB_HOST", $DB_USERNAME, $DB_PASSWORD);
         $DB_con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -615,11 +614,6 @@ class OctaORM{
         return ($result) ? $result : false;
     }
 
-    public function add_database($db_name,$hostname,$user_name,$password,$frozen=null){
-        $result = $this->redbean->addDatabase($db_name, $hostname, $user_name, $password, $frozen );
-        return ($result) ? true : false;
-    }
-
     public function select_database($db_name){
         $result = $this->redbean->selectDatabase($db_name);
         return ($result) ? true : false;
@@ -645,24 +639,14 @@ class OctaORM{
         return ($result) ? true : false;
     }
 
-    public function reset_query_count(){
-        $result = $this->redbean->resetQueryCount();
-        return ($result) ? true : false;
-    }
-
     public function get_query_count(){
-        $result = $this->redbean->getQueryCount();
-        return ($result) ? $result : false;
-    }
-
-    public function start_logging(){
-        $result = $this->redbean->startLogging();
-        return ($result) ? true : false;
+        $this->redbean->getQueryCount();
+        return true;
     }
 
     public function get_logs(){
-        $result = $this->redbean->getLogs();
-        return ($result) ? $result : false;
+        $this->redbean->getLogs();
+        return true;
     }
 
     /*querying*/
@@ -707,25 +691,14 @@ class OctaORM{
     }
 
     /*Data Tools*/
-    /*this will return an html data*/
-    public function get_look($sql, $bindings = array(), $keys = array( 'selected', 'id', 'name' ), $template = '<option %s value="%s">%s</option>', $filter = 'trim', $glue = '' ){
-        $result = $this->redbean->getLook()->look($sql,$bindings,$keys,$template,$filter,$glue);
-        return ($result) ? $result : false;
-    }
-
     public function match_up($type, $sql, $bindings = array(), $onFoundDo = NULL, $onNotFoundDo = NULL, &$bean = NULL){
         $result = $this->redbean->matchUp($type, $sql, $bindings, $onFoundDo, $onNotFoundDo, $bean);
         return ($result) ? $result : false;
     }
 
-    public function csv($sql, $id = array(), $bindings = array()){
-        $result = $this->redbean->csv($sql,$id,$bindings);
-        return ($result) ? true : false;
-    }
-
     public function find_all($table){
-        $result = $this->redbean->findAll($table);
-        return ($result) ? $result : false;
+        $this->redbean->findAll($table);
+        return true;
     }
 
     public function find($type,$sql,$bindings){
@@ -733,58 +706,15 @@ class OctaORM{
         return ($result) ? $result : false;
     }
 
-    public function csv_result(){
-        /*init var*/
-        $result = array();
-        $select = ($this->select) ? implode(',',$this->select) : '*';
-        $order_by = ($this->order_by) ? 'ORDER BY '.$this->order_by : '';
-        $join = ($this->join) ? $this->join : '';
-        $group_by = ($this->group_by) ? $this->group_by : '';
-        $limit = ($this->limit) ? 'LIMIT '.$this->limit : '';
-        $table = ($this->table) ? $this->table : '';
-
-        $where = ($this->where) ? $this->where : '';
-        $or_where = ($this->or_where) ? $this->or_where : '';
-        $where_in = ($this->where_in) ? $this->where_in : '';
-        $or_where_in = ($this->or_where_in) ? $this->or_where_in : '';
-        $where_not_in = ($this->where_not_in) ? $this->where_not_in : '';
-        $or_where_not_in = ($this->or_where_not_in) ? $this->or_where_not_in : '';
-
-        $like = ($this->like) ? $this->like : '';
-        $or_like = ($this->or_like) ? $this->or_like : '';
-        $not_like = ($this->not_like) ? $this->not_like : '';
-        $or_not_like = ($this->or_not_like) ? $this->or_not_like : '';
-        /*end init var*/
-
-        $this->last_query = "SELECT {$select} FROM {$table} {$join} {$where} {$or_where} {$where_in} {$or_where_in} {$where_not_in} {$or_where_not_in} {$like} {$or_like} {$not_like} {$or_not_like} {$group_by} {$order_by} {$limit}";
-        $data = $this->redbean->csv("SELECT {$select} FROM {$table} {$join} {$where} {$or_where} {$where_in} {$or_where_in} {$where_not_in} {$or_where_not_in} {$like} {$or_like} {$not_like} {$or_not_like} {$group_by} {$order_by} {$limit}");
-        if($data){
-            foreach($data as $key=>$row){
-                $result[$key] = (object)$row;
-            }
-        }
-
-        /*clear global variables*/
-        $this->clear_global_var();
-        /*end clearing global variables*/
-
-        return $result;
-    }
-
     /*Fluid and Frozen*/
     public function freeze($data=null){
         if($data){
-            if(is_array($data)){
-                if($data){
-
-                    $data = array();
-                    foreach($data as $key=>$row){
-                        $data[$key] = $row;
-                    }
-
-                    $this->redbean->freeze($data);
-                }
+            $data = array();
+            foreach($data as $key=>$row){
+                $data[$key] = $row;
             }
+
+            $this->redbean->freeze($data);
         }else{
             $this->redbean->freeze(TRUE);
         }
@@ -792,11 +722,6 @@ class OctaORM{
     }
 
     /*Debugging*/
-    public function fancy_debug($toggle = TRUE){
-        $result = $this->redbean->fancyDebug($toggle);
-        return ($result) ? $result : false;
-    }
-
     /*value "true", "false"*/
     public function debug($tf = TRUE, $mode = 0){
         $result = $this->redbean->debug($tf,$mode);
@@ -804,8 +729,8 @@ class OctaORM{
     }
 
     public function dump($data){
-        $result = $this->redbean->dump($data);
-        return ($result) ? $result : false;
+        $this->redbean->dump($data);
+        return true;
     }
 
     public function test_connection(){
@@ -819,24 +744,9 @@ class OctaORM{
         return ($result) ? $result : false;
     }
 
-    public function fetch_as($type){
-        $result = $this->redbean->fetchAs($type);
-        return ($result) ? $result : false;
-    }
-
-    public function alias($alias_name){
-        $result = $this->redbean->alias($alias_name);
-        return ($result) ? $result : false;
-    }
-
     /*Count*/
-    public function count(){
-        $result = $this->redbean->count();
-        return ($result) ? $result : false;
-    }
-
-    public function count_own($type){
-        $result = $this->redbean->countOwn($type);
+    public function count($type, $addSQL = '', $bindings = array()){
+        $result = $this->redbean->count($type,$addSQL,$bindings);
         return ($result) ? $result : false;
     }
 
@@ -863,67 +773,6 @@ class OctaORM{
 
     public function tag($bean, $tagList){
         $result = $this->redbean->tag($bean, $tagList);
-        return ($result) ? $result : false;
-    }
-
-    public function add_tag($bean, $tagList){
-        $result = $this->redbean->addTags($bean, $tagList);
-        return ($result) ? $result : false;
-    }
-
-    public function tagged($beanType,$tagList,$sql='',$bindings=array()){
-        $result = $this->redbean->addTags($beanType,$tagList,$sql,$bindings);
-        return ($result) ? $result : false;
-    }
-
-    public function untag($bean,$tagList){
-        $result = $this->redbean->untag($bean,$tagList);
-        return ($result) ? $result : false;
-    }
-
-    public function tagged_all($beanType,$tagList,$sql='',$bindings=array()){
-        $result = $this->redbean->taggedAll($beanType,$tagList,$sql,$bindings);
-        return ($result) ? $result : false;
-    }
-
-    public function count_tagged_all($beanType,$tagList,$sql='',$bindings=array()){
-        $result = $this->redbean->countTaggedAll($beanType,$tagList,$sql,$bindings);
-        return ($result) ? $result : false;
-    }
-
-    public function count_tagged($beanType,$tagList,$sql='',$bindings=array()){
-        $result = $this->redbean->countTagged($beanType,$tagList,$sql,$bindings);
-        return ($result) ? $result : false;
-    }
-
-    public function has_tag($bean,$tags,$all=FALSE){
-        $result = $this->redbean->hasTag($bean,$tags,$all);
-        return ($result) ? $result : false;
-    }
-
-    /*Import and Export*/
-    public function import($array, $selection = FALSE, $notrim = FALSE){
-        $result = $this->redbean->import($array,$selection,$notrim);
-        return ($result) ? $result : false;
-    }
-
-    public function import_row($row){
-        $result = $this->redbean->importRow($row);
-        return ($result) ? $result : false;
-    }
-
-    public function export($meta = FALSE, $parents = FALSE, $onlyMe = FALSE, $filters = array()){
-        $result = $this->redbean->export($meta,$parents,$onlyMe,$filters);
-        return ($result) ? $result : false;
-    }
-
-    public function export_all($beans, $parents = FALSE, $filters = array()){
-        $result = $this->redbean->exportAll($beans,$parents,$filters);
-        return ($result) ? $result : false;
-    }
-
-    public function import_from($sourceBean){
-        $result = $this->redbean->importFrom($sourceBean);
         return ($result) ? $result : false;
     }
 }
