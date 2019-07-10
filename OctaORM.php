@@ -119,8 +119,8 @@ class OctaORM{
             }
         }
 
-        $result = $this->redbean->store($data);
-        return ($result) ? true : false;
+        $this->redbean->store($data);
+        return true;
     }
 
     public function update_batch($table,$array,$where){
@@ -162,18 +162,18 @@ class OctaORM{
     }
 
     public function delete($table,$id){
-        if(is_array($id)){
-            if($id){
+        if($id){
+            if(is_array($id)){
                 foreach($id as $key=>$row){
                     $this->redbean->trash($table,$row);
                 }
 
                 return true;
-            }
 
-        }else{
-            $this->redbean->trash($table,$id);
-            return true;
+            }else{
+                $this->redbean->trash($table,$id);
+                return true;
+            }
         }
     }
 
@@ -724,8 +724,8 @@ class OctaORM{
     /*Debugging*/
     /*value "true", "false"*/
     public function debug($tf = TRUE, $mode = 0){
-        $result = $this->redbean->debug($tf,$mode);
-        return ($result) ? $result : false;
+        $this->redbean->debug($tf,$mode);
+        return true;
     }
 
     public function dump($data){
@@ -734,24 +734,19 @@ class OctaORM{
     }
 
     public function test_connection(){
-        $result = $this->redbean->testConnection();
-        return ($result) ? $result : false;
+        $this->redbean->testConnection();
+        return true;
     }
 
     /*Aliases*/
     public function load($oodb, $types, $id){
-        $result = $this->redbean->load($oodb, $types, $id);
-        return ($result) ? $result : false;
+        $this->redbean->load($oodb, $types, $id);
+        return true;
     }
 
     /*Count*/
     public function count($type, $addSQL = '', $bindings = array()){
         $result = $this->redbean->count($type,$addSQL,$bindings);
-        return ($result) ? $result : false;
-    }
-
-    public function count_shared($type){
-        $result = $this->redbean->countOwn($type);
         return ($result) ? $result : false;
     }
 
