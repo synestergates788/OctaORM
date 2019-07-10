@@ -219,7 +219,7 @@ class OctaORM{
             }
         }
 
-        $this->where = ($arr_check == false) ? $tmp_where : "WHERE ".$tmp_where;
+        $this->where = ($arr_check) ? "WHERE ".$tmp_where : $tmp_where;
     }
 
     public function or_where($data=null,$match=null){
