@@ -22,8 +22,6 @@ installing via composer.
 composer require octa-php/octa-orm
 ```
 
-Or clone this repo
-
 ### Prerequisites
 
 ```
