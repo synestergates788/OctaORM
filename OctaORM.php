@@ -36,7 +36,7 @@ class OctaORM{
 
         if(!$this->redbean->testConnection()){
             $conn = $this->initiate_database_connection($db);
-            $this->redbean->setup($conn);
+            $this->redbean->setup(/** @scrutinizer ignore-type */ $conn);
             $this->redbean->useFeatureSet( 'novice/latest' );
         }
     }
@@ -620,8 +620,8 @@ class OctaORM{
     }
 
     public function set_database(){
-        $result = $this->redbean->selectDatabase('default');
-        return ($result) ? true : false;
+        $this->redbean->selectDatabase('default');
+        return true;
     }
 
     public function begin(){
@@ -651,8 +651,8 @@ class OctaORM{
 
     /*querying*/
     public function exec($data){
-        $result = $this->redbean->exec($data);
-        return ($result) ? $result : false;
+        $this->redbean->exec($data);
+        return true;
     }
 
     public function get_all($table){
