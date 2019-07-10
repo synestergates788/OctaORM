@@ -3,8 +3,10 @@ Is an advance PHP-PDO ORM database class used by [OctaPHP](https://github.com/sy
 
 [![Build Status](https://travis-ci.org/synestergates788/OctaORM.svg?branch=master)](https://travis-ci.org/synestergates788/OctaORM) 
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/synestergates788/OctaORM/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/synestergates788/OctaORM/?branch=master)
+[![Latest Stable Version](https://poser.pugx.org/octa-php/octa-orm/v/stable)](https://packagist.org/packages/octa-php/octa-orm)
+[![Total Downloads](https://poser.pugx.org/octa-php/octa-orm/downloads)](https://packagist.org/packages/octa-php/octa-orm)
 [![Coverage Status](http://img.shields.io/coveralls/badges/badgerbadgerbadger.svg?style=flat-square)](https://coveralls.io/r/badges/badgerbadgerbadger) 
-[![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](http://badges.mit-license.org) 
+[![License](https://poser.pugx.org/octa-php/octa-orm/license)](https://packagist.org/packages/octa-php/octa-orm)
 [![Badges](http://img.shields.io/:badges-8/10-ff6799.svg?style=flat-square)](https://github.com/badges/badgerbadgerbadger)
 
 ## Powered By
