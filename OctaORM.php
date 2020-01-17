@@ -421,7 +421,7 @@ class OctaORM{
     }
 
     public function join($table,$joint,$join_type="INNER"){
-        $this->join = $join_type.' JOIN '.$table.' ON '.$joint;
+        $this->join .= ($this->join !== "" && $this->join !== null) ? ' '.$join_type.' JOIN '.$table.' ON '.$joint : $join_type.' JOIN '.$table.' ON '.$joint;
     }
 
     public function group_by($field){
